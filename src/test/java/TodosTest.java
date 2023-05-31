@@ -3,8 +3,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TodosTest {
-    SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
-    String[] subtasks = { "Молоко", "Яйца", "Хлеб" };
+    SimpleTask simpleTask = new SimpleTask(5, "Молоко купить");
+    String[] subtasks = {"Молоко", "Яйца", "Хлеб"};
     Epic epic = new Epic(55, subtasks);
     Meeting meeting = new Meeting(
             555,
@@ -21,7 +21,7 @@ public class TodosTest {
         todos.add(epic);
         todos.add(meeting);
 
-        Task[] expected = { simpleTask, epic, meeting };
+        Task[] expected = {simpleTask, epic, meeting};
         Task[] actual = todos.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -30,7 +30,7 @@ public class TodosTest {
     public void shouldFindInSimpleTaskIfTrue() {
 
         boolean expected = true;
-        boolean actual = simpleTask.matches("Позвонить");
+        boolean actual = simpleTask.matches("купить");
         Assertions.assertEquals(expected, actual);
     }
 
@@ -107,14 +107,38 @@ public class TodosTest {
     }
 
     @Test
-    public void shouldSearch() {
+    public void shouldSearchWhenOneResult() {
 
         todos.add(simpleTask);
         todos.add(epic);
         todos.add(meeting);
 
         Task[] expected = {epic};
+        Task[] actual = todos.search("Яйца");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchWhenTwoResult() {
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask,epic};
         Task[] actual = todos.search("Молоко");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchWhenNoResult() {
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Носки");
         Assertions.assertArrayEquals(expected, actual);
     }
 
